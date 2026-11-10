@@ -32,3 +32,16 @@ export function createRound(
     finishedAt: null,
   };
 }
+
+export interface SubmitGuessResult {
+  readonly state: RoundState;
+  readonly error: 'invalid' | 'duplicate' | 'finished' | null;
+}
+
+export const submitGuess: (
+  state: RoundState,
+  guess: string,
+  submittedAt: number,
+) => SubmitGuessResult = () => {
+  throw new Error('Not implemented');
+};
