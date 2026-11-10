@@ -1,3 +1,6 @@
+import { evaluateGuess } from './evaluate-guess.js';
+import { isValidGuess } from './is-valid-guess.js';
+
 export interface RoundSettings {
   readonly length: number;
   readonly base: number;
@@ -38,10 +41,36 @@ export interface SubmitGuessResult {
   readonly error: 'invalid' | 'duplicate' | 'finished' | null;
 }
 
-export const submitGuess: (
+export function submitGuess(
   state: RoundState,
   guess: string,
   submittedAt: number,
-) => SubmitGuessResult = () => {
-  throw new Error('Not implemented');
-};
+): SubmitGuessResult {
+  if (state.status === 'won') {
+    return { state, error: 'finished' };
+  }
+
+  const normalizedGuess = guess.toLowerCase();
+  const { length, base } = state.settings;
+
+  if (!isValidGuess(normalizedGuess, length, base)) {
+    return { state, error: 'invalid' };
+  }
+
+  if (state.history.some((entry) => entry.guess === normalizedGuess)) {
+    return { state, error: 'duplicate' };
+  }
+
+  const result = evaluateGuess(state.secret, normalizedGuess);
+  const hasWon = result.bulls === length;
+
+  return {
+    state: {
+      ...state,
+      status: hasWon ? 'won' : 'playing',
+      history: [...state.history, { guess: normalizedGuess, ...result }],
+      finishedAt: hasWon ? submittedAt : null,
+    },
+    error: null,
+  };
+}
