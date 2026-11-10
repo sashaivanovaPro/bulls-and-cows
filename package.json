@@ -8,14 +8,15 @@
     "npm": ">=10"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node tools/build.mjs",
     "typecheck": "tsc -p tsconfig.test.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "node tools/serve.mjs"
   },
   "lint-staged": {
     "*.{js,mjs,ts}": [

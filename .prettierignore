@@ -3,3 +3,4 @@ build/
 coverage/
 .vitest/
 package-lock.json
+index.html

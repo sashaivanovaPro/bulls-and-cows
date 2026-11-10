@@ -6,8 +6,12 @@ import tseslint from 'typescript-eslint';
 export default defineConfig(
   { ignores: ['build/**', 'coverage/**', '.vitest/**'] },
   {
-    files: ['**/*.{js,ts}'],
+    files: ['**/*.{js,mjs,ts}'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
+  },
+  {
+    files: ['tools/**/*.mjs'],
+    languageOptions: { globals: globals.node },
   },
   {
     files: ['scripts/**/*.ts'],
