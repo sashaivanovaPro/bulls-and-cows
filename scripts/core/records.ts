@@ -9,13 +9,27 @@ export interface GameRecord {
 
 export const RECORD_LIMIT = 10;
 
-export const createRecord: (round: RoundState) => GameRecord | null = () => {
-  throw new Error('Not implemented');
-};
+export function createRecord(round: RoundState): GameRecord | null {
+  if (round.status !== 'won' || round.finishedAt === null) {
+    return null;
+  }
 
-export const addRecord: (
+  return {
+    attempts: round.history.length,
+    elapsedMs: round.finishedAt - round.startedAt,
+    length: round.settings.length,
+    base: round.settings.base,
+  };
+}
+
+export function addRecord(
   records: readonly GameRecord[],
   record: GameRecord,
-) => readonly GameRecord[] = () => {
-  throw new Error('Not implemented');
-};
+): readonly GameRecord[] {
+  return [...records, record]
+    .sort(
+      (first, second) =>
+        first.attempts - second.attempts || first.elapsedMs - second.elapsedMs,
+    )
+    .slice(0, RECORD_LIMIT);
+}
