@@ -18,10 +18,17 @@ export interface RoundState {
   readonly finishedAt: number | null;
 }
 
-export const createRound: (
+export function createRound(
   settings: RoundSettings,
   secret: string,
   startedAt: number,
-) => RoundState = () => {
-  throw new Error('Not implemented');
-};
+): RoundState {
+  return {
+    settings: { ...settings },
+    secret: secret.toLowerCase(),
+    status: 'playing',
+    history: [],
+    startedAt,
+    finishedAt: null,
+  };
+}
